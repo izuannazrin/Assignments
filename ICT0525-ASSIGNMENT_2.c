@@ -34,11 +34,12 @@ int main()
 
 	printf("\t\tSnacks on Shelves\n\n");
 
+
 	// How many snack?
 	do {
 		printf("Enter number of snacks: ");
 		scanf("%d", &snacks_num);
-		if (snacks_num > MAX_SNACKS)
+		if (snacks_num > MAX_SNACKS)	// RULE: Maximum 10 types of snacks
 			printf("ERROR: Only maximum 10 snacks can be sold!\n\n");
 	} while (snacks_num > MAX_SNACKS);
 
@@ -55,7 +56,7 @@ int main()
 		do {
 			printf("Enter quantity on rack: ");
 			scanf("%d", &available_quantity[i]);
-			if (available_quantity[i] > MAX_SNACK_QUANTITY)
+			if (available_quantity[i] > MAX_SNACK_QUANTITY)	// RULE: Maximum 10 snacks
 				printf("ERROR: Only maximum 10 snacks can be in rack!\n\n");
 		} while (available_quantity[i] > MAX_SNACK_QUANTITY);
 	}
@@ -71,17 +72,20 @@ int main()
 		{
 			case 's':
 			case 'S':
-			total_selling_price += sell_snack(snacks_num, name, price, available_quantity, sold_quantity);
-			break;
+				// Sell snacks. Function sell_snack() will return how much we sold.
+				total_selling_price += sell_snack(snacks_num, name, price, available_quantity, sold_quantity);
+				break;
 
 			case 'u':
 			case 'U':
-			update_quantity(snacks_num, name, price, available_quantity, sold_quantity);
-			break;
+				// Update snack quantity
+				update_quantity(snacks_num, name, price, available_quantity, sold_quantity);
+				break;
 
 			case 'e':
 			case 'E':
-			still_running = 0;
+				// Exit
+				still_running = 0;
 			break;
 
 			default:
@@ -90,6 +94,7 @@ int main()
 		}
 	}
 
+	// Program end
 	show_snacks(snacks_num, name, price, available_quantity, sold_quantity);
 	printf("Today selling is RM%.02f\n", total_selling_price);
 	printf("Profit is RM%.02f\n", total_selling_price * PROFIT);
@@ -97,6 +102,11 @@ int main()
 	return 0;
 }
 
+/* sell_snack(...)
+ * Asks the user what to sell, and how many. Also print receipt on end.
+ * Returns how much we sold.
+ * 
+ */
 float sell_snack(int snacks_num, char name[][100], float price[], int available_quantity[], int sold_quantity[])
 {
 	int selected_snack_no, selected_quantity;
@@ -109,7 +119,7 @@ float sell_snack(int snacks_num, char name[][100], float price[], int available_
 		// Display snacks first
 		show_snacks(snacks_num, name, price, available_quantity, sold_quantity);
 
-		// Cannot use do-while here. Instead let's loop back if invalid snack.
+		// Cannot use do-while here. Instead let's loop back (using continue) if invalid snack.
 		printf("Enter snack no (0 to cancel): ");
 		scanf("%d", &selected_snack_no);
 		if (selected_snack_no == 0)
@@ -156,6 +166,10 @@ float sell_snack(int snacks_num, char name[][100], float price[], int available_
 	return selling_total;
 }
 
+/* update_quantity(...)
+ * Asks the user for updating (add) more snacks.
+ * 
+ */
 void update_quantity(int snacks_num, char name[][100], float price[], int available_quantity[], int sold_quantity[])
 {
 	int i, add_snack, new_quantity;
@@ -179,6 +193,10 @@ void update_quantity(int snacks_num, char name[][100], float price[], int availa
 	return;
 }
 
+/* show_snacks(...)
+ * Shows all snack in rack.
+ * 
+ */
 void show_snacks(int snacks_num, char name[][100], float price[], int available_quantity[], int sold_quantity[])
 {
 	int i;
